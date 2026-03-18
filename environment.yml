@@ -22,3 +22,7 @@ dependencies:
   # for making maps
   - leafmap
   - ipyleaflet
+
+  # for saving maps statically
+  - selenium
+  - webdriver-manager

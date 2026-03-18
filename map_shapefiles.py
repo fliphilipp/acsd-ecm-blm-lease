@@ -3,43 +3,40 @@
 # %autoreload 2
 # %matplotlib widget
 
-import geopandas as gpd
-import leafmap.foliumap as leafmap
+import time
+import math
+import html
 import folium
+from pathlib import Path
+import geopandas as gpd
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from IPython.display import display, Image
 
 # +
 # Paths
 lease_boundary_fp = "output/lease_boundary.shp"
 lease_points_fp = "output/lease_points.shp"
+map_filename = "output/lease_map_from_shapefiles.html"
 
 # Read shapefiles
-lease_boundary = gpd.read_file(lease_boundary_fp)
-lease_points = gpd.read_file(lease_points_fp)
-# -
+lease_boundary = gpd.read_file(lease_boundary_fp).to_crs(4326)
+lease_points = gpd.read_file(lease_points_fp).to_crs(4326)
 
-lease_boundary
+print(f'\n{lease_boundary_fp}')
+display(lease_boundary)
+print(f'\n{lease_points_fp}')
+display(lease_points)
 
-lease_points
-
-# +
-import math
-import html
-
-import geopandas as gpd
-import folium
-
-
-lease_boundary = gpd.read_file("output/lease_boundary.shp").to_crs(4326)
-lease_points = gpd.read_file("output/lease_points.shp").to_crs(4326)
-
-# --- map center ---
-center = [
-    lease_boundary.geometry.centroid.y.iloc[0],
-    lease_boundary.geometry.centroid.x.iloc[0],
-]
+# get center in locally projected CRS 
+lease_boundary_proj = lease_boundary.to_crs(32611)  # UTM zone 11N (San Diego area)
+centroid_proj = lease_boundary_proj.geometry.centroid.iloc[0]
+centroid = gpd.GeoSeries([centroid_proj], crs=32611).to_crs(4326).iloc[0] # convert back to lat/lon
+center = [centroid.y, centroid.x]
 
 # --- create map with no default base tiles so we can control them explicitly ---
-m = folium.Map(location=center, zoom_start=16, tiles=None, control_scale=True, height="800px", width="1000px")
+m = folium.Map(location=center, zoom_start=16, tiles=None, control_scale=True, height="80vh", width="80%")
 
 # --- selectable basemaps ---
 folium.TileLayer(
@@ -199,7 +196,7 @@ for _, row in boundary_pts.iterrows():
     ).add_to(fg_boundary_points)
 
     # offset label outward from polygon
-    lx, ly = outward_label_position(x, y, cx, cy, offset_deg=0.0004)
+    lx, ly = outward_label_position(x, y, cx, cy, offset_deg=0.0003)
 
     # pick left/right alignment depending on side of centroid
     side = "right" if x >= cx else "left"
@@ -276,9 +273,30 @@ fg_signage.add_to(m)
 # optional extras
 folium.LayerControl(collapsed=False).add_to(m)
 
-m.save("output/lease_map_from_shapefiles.html")
+m.save(map_filename)
 
-m
+display(m)
+
+html_path = Path(map_filename).resolve()
+png_file = str(html_path).replace(".html", ".png")
+
+options = webdriver.ChromeOptions()
+options.add_argument("--headless=new")
+options.add_argument("--window-size=1000,1200")
+
+driver = webdriver.Chrome(
+    service=Service(ChromeDriverManager().install()),
+    options=options,
+)
+
+driver.get(html_path.as_uri())
+
+time.sleep(2)
+
+driver.save_screenshot(png_file)
+driver.quit()
+
+print('\n\nstatic PNG image:')
+display(Image(png_file))
 # -
-
 
