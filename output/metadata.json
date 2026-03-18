@@ -1,0 +1,78 @@
+{
+  "created_utc": "2026-03-18T02:03:50+00:00",
+  "coordinate_reference": {
+    "epsg": 4326,
+    "datum": "WGS 84",
+    "epoch_or_adjustment_date": "NOT PROVIDED",
+    "geoid_model": "N/A (no elevations used)",
+    "input_axis_order": "latitude, longitude (decimal degrees)",
+    "geometry_axis_order": "x=longitude, y=latitude (standard GIS convention)"
+  },
+  "plss": {
+    "state": "California",
+    "principal_meridian": "San Bernardino Meridian",
+    "township": {
+      "number": 15,
+      "dir": "S"
+    },
+    "range": {
+      "number": 1,
+      "dir": "E"
+    },
+    "section": 1,
+    "subdivisions_normalized": [
+      "NE1/4NE1/4",
+      "SE1/4NE1/4",
+      "NE1/4SE1/4"
+    ]
+  },
+  "lineage_and_quality": {
+    "source_summary": "Corner coordinates were digitized from online mapping software using government land boundary overlays; coordinates are not from a field survey.",
+    "positional_accuracy": "UNKNOWN (digitized / not surveyed)",
+    "intended_use": "Administrative/GIS depiction and draft description support."
+  },
+  "computation_settings": {
+    "traverse_direction": "clockwise",
+    "distance_units": "us_survey_feet",
+    "distance_decimals": 2,
+    "bearing_seconds_decimals": 2,
+    "area_rounding": "nearest_full_acre"
+  },
+  "outputs": {
+    "description_file": "description_of_land.txt",
+    "choices_file": "choices_and_methods.txt",
+    "corners_table": "boundary_corners.csv",
+    "courses_table": "boundary_courses.csv",
+    "lease_boundary_shapefile": "lease_boundary.shp",
+    "lease_points_shapefile": "lease_points.shp"
+  },
+  "field_dictionary": {
+    "lease_boundary.shp": {
+      "lease_id": "Identifier for the lease polygon feature",
+      "meridian": "Principal meridian name (spelled out)",
+      "state": "State name",
+      "twp": "Township (e.g., 15S)",
+      "rng": "Range (e.g., 1E)",
+      "sec": "Section number",
+      "subs": "Semicolon-delimited subdivision symbols (normalized)",
+      "crs": "CRS label",
+      "src": "Source type (digitized/survey/etc.)",
+      "acc": "Accuracy statement (coarse)"
+    },
+    "lease_points.shp": {
+      "feat_key": "Unique feature key (e.g., lease_boundary_point_of_beginning, signage_*)",
+      "feat_kind": "boundary or signage",
+      "pt_id": "Boundary vertex id (0..4) or -1 for signage",
+      "is_pob": "yes/no for Point of Beginning",
+      "label": "Human-friendly label",
+      "lat": "Latitude decimal degrees",
+      "lon": "Longitude decimal degrees",
+      "sign_id": "Signage id (if feat_kind=signage)",
+      "sign_typ": "Sign type string (semicolon-delimited)",
+      "status": "existing/proposed",
+      "twp": "Township",
+      "rng": "Range",
+      "sec": "Section"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+name: lease_blm_env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy
+  - pandas
+  - geopandas
+  - shapely
+  - pyproj
+  - fiona
+  - matplotlib
+
+  # for notebook magics / kernel integration
+  - ipython
+  - ipykernel
+
+  # for %matplotlib widget
+  - ipympl
+  - ipywidgets
+
+  # for making maps
+  - leafmap
+  - ipyleaflet

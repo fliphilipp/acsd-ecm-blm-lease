@@ -1,0 +1,30 @@
+San Bernardino Meridian, California
+T. 15 S., R. 1 E.,
+sec. 1, NE1/4NE1/4, SE1/4NE1/4, and NE1/4SE1/4,
+that portion described as follows:
+
+BEGINNING at Point 0 (POINT OF BEGINNING), having geographic coordinates 32° 54' 6.44" North, 116° 49' 25.39" West;
+THENCE, South 00° 05' 3.71" West, a distance of 4169.76 U.S. survey feet, to Point 1;
+THENCE, North 71° 31' 49.06" West, a distance of 1527.62 U.S. survey feet, to Point 2;
+THENCE, North 03° 05' 55.68" East, a distance of 2044.20 U.S. survey feet, to Point 3;
+THENCE, North 22° 41' 7.77" East, a distance of 1758.87 U.S. survey feet, to Point 4;
+THENCE, North 88° 07' 19.71" East, a distance of 666.43 U.S. survey feet, returning to the POINT OF BEGINNING.
+
+The area described contains approximately 111 acres.
+
+BASIS OF BEARINGS: Bearings stated herein are geodetic bearings computed
+from the listed corner coordinates on the WGS 84 ellipsoid and are referenced
+to true (geodetic) north.
+
+COORDINATE REFERENCE:
+  CRS: EPSG:4326 (WGS 84 geographic coordinates)
+  Datum: WGS 84
+  Epoch/Date of adjustment: NOT PROVIDED
+  Geoid model: N/A (no elevations used)
+
+QUALIFICATION / LINEAGE:
+  Corner coordinates were digitized from online mapping software using government land boundary overlays; coordinates are not from a field survey.
+  Positional accuracy: UNKNOWN (digitized / not surveyed)
+
+SUPPORTING TABLES:
+  Corner coordinate and course tables are provided as separate CSV files in this deliverable package.
