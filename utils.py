@@ -429,7 +429,7 @@ def make_description_of_land(
     lines.append(f"  Positional accuracy: {LINEAGE_AND_QUALITY['positional_accuracy']}")
     lines.append("")
     lines.append("SUPPORTING TABLES:")
-    lines.append("  Corner coordinate and course tables are provided as separate CSV files in this deliverable package.")
+    lines.append("  Corner coordinate and course tables are provided as separate CSV files.")
     return "\n".join(lines)
 
 
@@ -675,6 +675,27 @@ def generate_lease_deliverables(LEASE_PLSS=LEASE_PLSS,
     # Metadata
     write_metadata(out_dir, LEASE_PLSS, COMPUTATION_SETTINGS=COMPUTATION_SETTINGS, COORDINATE_REFERENCE=COORDINATE_REFERENCE, LINEAGE_AND_QUALITY=LINEAGE_AND_QUALITY)
 
+    # Write to README
+    readme_path = 'README.md'
+    land_desc_path = f'{out_dir}/description_of_land.txt'
+    choices_path = f'{out_dir}/choices_and_methods.txt'
+    with open(readme_path, 'r', encoding='utf-8') as f:
+        readme_content = f.read()
+    target_substring = "\n\n# Description of Land\n\n"
+    index = readme_content.find(target_substring)
+    if index != -1:
+        readme_content = readme_content[:index]
+    with open(land_desc_path, 'r', encoding='utf-8') as f:
+        land_desc_text = f.read()
+    with open(choices_path, 'r', encoding='utf-8') as f:
+        choices_text = f.read()
+    readme_content += target_substring
+    readme_content += land_desc_text
+    readme_content += "\n\n## "
+    readme_content += choices_text
+    with open(readme_path, 'w', encoding='utf-8') as f:
+        f.write(readme_content)
+    
     # Console summary
     print(f"Wrote outputs to: {out_dir.resolve()}")
     print(f"Computed geodesic area: {area_acres:.4f} acres")

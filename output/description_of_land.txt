@@ -27,4 +27,4 @@ QUALIFICATION / LINEAGE:
   Positional accuracy: UNKNOWN (digitized / not surveyed)
 
 SUPPORTING TABLES:
-  Corner coordinate and course tables are provided as separate CSV files in this deliverable package.
+  Corner coordinate and course tables are provided as separate CSV files.

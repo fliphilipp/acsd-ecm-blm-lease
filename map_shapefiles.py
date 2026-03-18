@@ -36,7 +36,7 @@ centroid = gpd.GeoSeries([centroid_proj], crs=32611).to_crs(4326).iloc[0] # conv
 center = [centroid.y, centroid.x]
 
 # --- create map with no default base tiles so we can control them explicitly ---
-m = folium.Map(location=center, zoom_start=16, tiles=None, control_scale=True, height="80vh", width="80%")
+m = folium.Map(location=center, zoom_start=16, tiles=None, control_scale=True, height="800px", width="1000px")
 
 # --- selectable basemaps ---
 folium.TileLayer(
@@ -282,7 +282,7 @@ png_file = str(html_path).replace(".html", ".png")
 
 options = webdriver.ChromeOptions()
 options.add_argument("--headless=new")
-options.add_argument("--window-size=1000,1200")
+options.add_argument("--window-size=1000,800")
 
 driver = webdriver.Chrome(
     service=Service(ChromeDriverManager().install()),
