@@ -26,3 +26,6 @@ dependencies:
   # for saving maps statically
   - selenium
   - webdriver-manager
+
+  # for kml exporting
+  - simplekml

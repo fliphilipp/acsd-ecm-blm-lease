@@ -59,7 +59,7 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 import pandas as pd
 import geopandas as gpd
 from pyproj import Geod
-from shapely.geometry import Point, Polygon
+from shapely.geometry import Point, Polygon, LineString
 from shapely.validation import explain_validity
 
 
@@ -560,6 +560,50 @@ def write_shapefiles(out_dir: Path, plss: Dict[str, Any], poly: Polygon, vertice
     gdf_pts.to_file(shp_dir / "lease_points.shp", driver="ESRI Shapefile", index=False)
 
 
+def write_trails_shapefile(out_dir: Path, trails_geojson_path: str | Path = "data/ECM_trails.geojson",) -> Path:
+    """
+    Read trail data from a GeoJSON, keep only LineString features and their titles,
+    and write them to trails.shp in EPSG:4326.
+    """
+    trails_geojson_path = Path(trails_geojson_path)
+
+    if not trails_geojson_path.exists():
+        raise FileNotFoundError(f"Trail GeoJSON not found: {trails_geojson_path}")
+
+    gdf = gpd.read_file(trails_geojson_path)
+
+    if gdf.empty:
+        raise ValueError(f"No features found in {trails_geojson_path}")
+
+    # Reproject to EPSG:4326 if needed
+    if gdf.crs is None:
+        # If the GeoJSON truly has no CRS metadata, assume EPSG:4326
+        gdf = gdf.set_crs("EPSG:4326")
+    else:
+        gdf = gdf.to_crs(4326)
+
+    # Keep only LineString features
+    gdf = gdf[gdf.geometry.geom_type == "LineString"].copy()
+
+    if gdf.empty:
+        raise ValueError("No LineString features found in trail GeoJSON.")
+
+    # Keep only title + geometry
+    # Adjust this if the source field is named differently
+    if "title" not in gdf.columns:
+        raise ValueError("Expected a 'title' field in trail GeoJSON.")
+
+    gdf = gdf[["title", "geometry"]].copy()
+
+    # Shapefile field names should be short/simple
+    gdf = gdf.rename(columns={"title": "title"})
+
+    out_path = out_dir / "trails.shp"
+    gdf.to_file(out_path, driver="ESRI Shapefile", index=False)
+
+    return out_path
+
+
 def write_tables(out_dir: Path, vertices: List[Vertex], courses: pd.DataFrame) -> Tuple[Path, Path]:
     corners_rows: List[Dict[str, Any]] = []
     for v in vertices:
@@ -642,7 +686,8 @@ def generate_lease_deliverables(LEASE_PLSS=LEASE_PLSS,
                                 COMPUTATION_SETTINGS=COMPUTATION_SETTINGS, 
                                 COORDINATE_REFERENCE=COORDINATE_REFERENCE, 
                                 LINEAGE_AND_QUALITY=LINEAGE_AND_QUALITY,
-                                out_dir="output") -> None:
+                                out_dir="output",
+                                trails_geojson_path="data/ECM_trails.geojson",) -> None:
 
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -669,8 +714,11 @@ def generate_lease_deliverables(LEASE_PLSS=LEASE_PLSS,
     # Write tables
     write_tables(out_dir, ordered_vertices, courses)
 
-    # Write shapefiles
+    # Write shapefiles for lease boundary and signage
     write_shapefiles(out_dir, LEASE_PLSS, poly, ordered_vertices, SIGNAGE, COORDINATE_REFERENCE=COORDINATE_REFERENCE)
+
+    # Write trails shapefile
+    write_trails_shapefile(out_dir, trails_geojson_path=trails_geojson_path)
 
     # Metadata
     write_metadata(out_dir, LEASE_PLSS, COMPUTATION_SETTINGS=COMPUTATION_SETTINGS, COORDINATE_REFERENCE=COORDINATE_REFERENCE, LINEAGE_AND_QUALITY=LINEAGE_AND_QUALITY)

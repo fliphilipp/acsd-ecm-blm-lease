@@ -37,10 +37,14 @@ SIGNAGE: List[Dict[str, Any]] = [
     {"id": "entrance_kiosk", "lat": 32.89052, "lon": -116.82375, "type": "informational;boundary", "status": "proposed"},
     {"id": "to_toe", "lat": 32.89173, "lon": -116.82615, "type": "directional", "status": "existing"},
     {"id": "south_ridge_trail", "lat": 32.89152, "lon": -116.82718, "type": "directional", "status": "existing"},
-    {"id": "keep_out_el_cap_preserve", "lat": 32.90171, "lon": -116.82534, "type": "regulatory;boundary", "status": "proposed"},
+    {"id": "keep_out_el_cap_preserve", "lat": 32.90174, "lon": -116.82544, "type": "regulatory;boundary", "status": "proposed"},
     {"id": "cnf_blm_lease_boundary", "lat": 32.89565, "lon": -116.82374, "type": "boundary", "status": "proposed"},
     {"id": "to_toe_1st_tier", "lat": 32.89720, "lon": -116.82430, "type": "directional", "status": "existing"},
     {"id": "to_2nd_tier_regalias", "lat": 32.89960, "lon": -116.82417, "type": "directional", "status": "existing"},
+    {"id": "toe", "lat": 32.89657, "lon": -116.82661, "type": "rock_climbing_crag", "status": "proposed"},
+    {"id": "1st_tier", "lat": 32.89814, "lon": -116.82460, "type": "rock_climbing_crag", "status": "proposed"},
+    {"id": "2nd_tier", "lat": 32.89943, "lon": -116.82474, "type": "rock_climbing_crag", "status": "proposed"},
+    {"id": "regalias", "lat": 32.90030, "lon": -116.82389, "type": "rock_climbing_crag", "status": "proposed"},
 ]
 
 COORDINATE_REFERENCE: Dict[str, Any] = {
@@ -70,6 +74,8 @@ COMPUTATION_SETTINGS: Dict[str, Any] = {
     "area_rounding": "nearest_full_acre",   # for approximate area clause
 }
 
+TRAILS_DATA = "data/ECM_trails.geojson"
+
 # +
 kwargs = {
     "LEASE_PLSS":            LEASE_PLSS,
@@ -78,6 +84,7 @@ kwargs = {
     "COORDINATE_REFERENCE":  COORDINATE_REFERENCE,
     "LINEAGE_AND_QUALITY":   LINEAGE_AND_QUALITY, 
     "COMPUTATION_SETTINGS":  COMPUTATION_SETTINGS,
+    "trails_geojson_path":   TRAILS_DATA,
 }
 
 generate_lease_deliverables(**kwargs)
